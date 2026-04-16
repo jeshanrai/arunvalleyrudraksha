@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\Users\\\\Dell\\\\Downloads\\\\rudraksha-shiva\")",
+      "Bash(mkdir -p \"D:/rudraksha/frontend/public/models\")",
+      "Bash(cp \"C:/Users/Dell/Downloads/rudraksha-shiva/source/rudraksha.glb\" \"D:/rudraksha/frontend/public/models/\")",
+      "Bash(cp \"C:/Users/Dell/Downloads/rudraksha-shiva/textures/\"* \"D:/rudraksha/frontend/public/models/\")",
+      "Bash(curl *)"
+    ]
+  }
+}

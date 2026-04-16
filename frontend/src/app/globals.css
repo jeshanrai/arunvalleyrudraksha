@@ -1,0 +1,246 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: #0D0A06;
+  --color-bg-light: #141008;
+  --color-bg-card: #1a150d;
+  --color-gold: #C9A84C;
+  --color-gold-dim: rgba(201, 168, 76, 0.15);
+  --color-gold-glow: rgba(201, 168, 76, 0.08);
+  --color-cream: #F5EDD8;
+  --color-cream-muted: #C8B99A;
+  --color-cream-dim: rgba(245, 237, 216, 0.06);
+  --color-cream-border: rgba(245, 237, 216, 0.1);
+  --color-green: #1B3A2D;
+  --color-green-light: #2a5a44;
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body), "Cormorant Garamond", serif;
+  background: var(--color-bg);
+  color: var(--color-cream);
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--color-gold);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+a:hover {
+  color: var(--color-cream);
+}
+
+.font-heading {
+  font-family: var(--font-heading), "Cinzel", serif;
+}
+
+/* ═══════════ ENTRANCE ANIMATIONS ═══════════ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-fade-in-down { animation: fadeInDown 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+.animate-scale-in { animation: scaleIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+
+/* ═══════════ GLOW & SHIMMER ═══════════ */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.text-gradient-gold {
+  background: linear-gradient(
+    90deg,
+    #C9A84C 0%,
+    #E8D5A0 25%,
+    #C9A84C 50%,
+    #E8D5A0 75%,
+    #C9A84C 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 6s linear infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+@keyframes ringExpand {
+  0% { opacity: 0.15; transform: translate(-50%, -50%) scale(0.8); }
+  50% { opacity: 0.3; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
+}
+
+@keyframes ringRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ═══════════ FLOAT & SPIN ═══════════ */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-slow-spin { animation: slowSpin 30s linear infinite; }
+
+/* ═══════════ GRAIN TEXTURE OVERLAY ═══════════ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ═══════════ SECTION DIVIDER ═══════════ */
+.section-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-gold), transparent);
+  opacity: 0.5;
+}
+
+/* ═══════════ CARD GLOW ON HOVER ═══════════ */
+.card-glow {
+  position: relative;
+  overflow: hidden;
+}
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 168, 76, 0.06),
+    transparent 40%
+  );
+  transition: opacity 0.4s;
+  pointer-events: none;
+  z-index: 1;
+}
+.card-glow:hover::before {
+  opacity: 1;
+}
+
+/* ═══════════ BUTTON HOVER SHINE ═══════════ */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+.btn-shine:hover::after {
+  left: 120%;
+}
+
+/* ═══════════ NAV LINK UNDERLINE ═══════════ */
+.nav-link-hover {
+  position: relative;
+}
+.nav-link-hover::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--color-gold);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+.nav-link-hover:hover::after,
+.nav-link-hover.active::after {
+  width: 100%;
+  left: 0;
+}
+
+/* ═══════════ CUSTOM SCROLLBAR ═══════════ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-cream); }
+
+/* ═══════════ MARQUEE ═══════════ */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ═══════════ COUNTER NUMBER REVEAL ═══════════ */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
