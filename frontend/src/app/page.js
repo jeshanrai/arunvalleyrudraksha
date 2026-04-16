@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import MarqueeBand from "@/components/MarqueeBand";
 import Origin from "@/components/Origin";
 import Collection from "@/components/Collection";
 import Zodiac from "@/components/Zodiac";
@@ -13,6 +14,7 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
+      <MarqueeBand />
       <Origin />
       <Collection />
       <Zodiac />

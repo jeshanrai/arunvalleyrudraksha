@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import { RevealOnScroll } from "./useReveal";
 
 const testimonials = [
@@ -30,35 +31,59 @@ const testimonials = [
   },
 ];
 
-// Duplicate for seamless loop
-const marqueeItems = [...testimonials, ...testimonials];
-
-function TestimonialCard({ t }) {
+function CompactCard({ t }) {
   return (
-    <div className="min-w-[320px] max-w-[360px] border border-cream-border/50 bg-bg-card p-8 lg:p-9 shrink-0 group hover:border-gold/20 transition-all duration-500">
-      {/* Large quote mark */}
-      <div className="font-heading text-[3rem] text-gold/10 leading-none mb-2">\u201C</div>
-      <div className="text-gold text-[12px] tracking-[4px] mb-4 opacity-60">
+    <div className="border border-cream-border/30 bg-bg-card hover:border-gold/15 p-5 sm:p-6 transition-all duration-500 group h-full">
+      <div className="text-gold text-[10px] tracking-[3px] mb-3 opacity-40 group-hover:opacity-60 transition-opacity">
         \u2605\u2605\u2605\u2605\u2605
       </div>
-      <p className="text-[15px] italic text-cream-muted/80 leading-relaxed mb-6">
-        {t.quote}
+      <p className="text-[13px] italic text-cream-muted/70 leading-relaxed mb-4 line-clamp-3">
+        &ldquo;{t.quote}&rdquo;
       </p>
-      <div className="w-8 h-px bg-gold/20 mb-4" />
-      <div className="font-heading text-[10px] tracking-[0.12em] uppercase text-gold">
+      <div className="w-6 h-px bg-gold/15 mb-3" />
+      <div className="font-heading text-[10px] tracking-[0.1em] uppercase text-gold/80">
         {t.name}
       </div>
-      <div className="text-[11px] text-cream-muted/40 mt-1">{t.role}</div>
+      <div className="text-[10px] text-cream-muted/35 mt-0.5">{t.role}</div>
     </div>
   );
 }
 
 export default function Testimonials() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const goTo = useCallback(
+    (index) => {
+      if (index === activeIndex || isTransitioning) return;
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setActiveIndex(index);
+        setIsTransitioning(false);
+      }, 300);
+    },
+    [activeIndex, isTransitioning]
+  );
+
+  // Auto-cycle
+  useEffect(() => {
+    const timer = setInterval(() => {
+      goTo((activeIndex + 1) % testimonials.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [activeIndex, goTo]);
+
+  const featured = testimonials[activeIndex];
+  const compact = testimonials.filter((_, i) => i !== activeIndex).slice(0, 3);
+
   return (
-    <section className="py-28 px-6 bg-bg-light relative overflow-hidden">
+    <section className="py-16 sm:py-28 px-4 sm:px-6 bg-bg-light relative overflow-hidden">
+      {/* Decorative */}
+      <div className="absolute top-1/2 left-0 w-64 h-64 rounded-full bg-gold/[0.02] blur-[100px] pointer-events-none -translate-y-1/2" />
+
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <RevealOnScroll className="mb-14 text-center">
+        <RevealOnScroll className="mb-12 sm:mb-16 text-center">
           <span className="font-heading text-[10px] tracking-[0.25em] uppercase text-gold/80 block mb-4">
             Trusted Worldwide
           </span>
@@ -67,22 +92,67 @@ export default function Testimonials() {
           </h2>
           <div className="section-divider mx-auto" />
         </RevealOnScroll>
-      </div>
 
-      {/* Infinite Marquee - full width */}
-      <RevealOnScroll>
-        <div className="relative overflow-hidden">
-          {/* Fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-bg-light to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-bg-light to-transparent z-10 pointer-events-none" />
+        {/* Featured Quote */}
+        <RevealOnScroll className="mb-10 sm:mb-14">
+          <div className="glass-card p-8 sm:p-12 lg:p-16 max-w-3xl mx-auto text-center relative">
+            {/* Large decorative quote */}
+            <div className="font-heading text-[4rem] sm:text-[6rem] text-gold/[0.06] leading-none absolute top-4 left-6 sm:top-6 sm:left-10 pointer-events-none select-none">
+              \u201C
+            </div>
 
-          <div className="flex gap-5 animate-marquee w-max">
-            {marqueeItems.map((t, i) => (
-              <TestimonialCard key={`${t.name}-${i}`} t={t} />
+            <div
+              className={`transition-all duration-300 ${
+                isTransitioning
+                  ? "opacity-0 translate-y-3"
+                  : "opacity-100 translate-y-0"
+              }`}
+            >
+              <div className="text-gold text-[11px] tracking-[5px] mb-6 opacity-50">
+                \u2605\u2605\u2605\u2605\u2605
+              </div>
+
+              <p className="text-[clamp(1rem,2vw,1.25rem)] italic text-cream/90 leading-relaxed mb-8">
+                &ldquo;{featured.quote}&rdquo;
+              </p>
+
+              <div className="w-10 h-px bg-gold/25 mx-auto mb-5" />
+
+              <div className="font-heading text-[11px] tracking-[0.14em] uppercase text-gold">
+                {featured.name}
+              </div>
+              <div className="text-[12px] text-cream-muted/45 mt-1">
+                {featured.role}
+              </div>
+            </div>
+
+            {/* Navigation dots */}
+            <div className="flex justify-center gap-2.5 mt-8">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className={`w-2 h-2 rounded-full transition-all duration-500 cursor-pointer border-none ${
+                    i === activeIndex
+                      ? "bg-gold w-6"
+                      : "bg-cream-muted/20 hover:bg-cream-muted/40"
+                  }`}
+                  aria-label={`View testimonial ${i + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </RevealOnScroll>
+
+        {/* Compact cards row */}
+        <RevealOnScroll>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {compact.map((t) => (
+              <CompactCard key={t.name} t={t} />
             ))}
           </div>
-        </div>
-      </RevealOnScroll>
+        </RevealOnScroll>
+      </div>
     </section>
   );
 }
